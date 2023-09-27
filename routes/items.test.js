@@ -36,5 +36,63 @@ describe("GET /items/:name", function() {
 
         expect(resp.body).toEqual({item: nike});
     });
+
+    test("Responds with 404 if can't find item", async function() {
+        const resp = await request(app).get(`/items/0`);
+        expect(resp.statusCode).toBe(404);
+    });
 });
 //end
+
+/** POST /items - create items from data; return { item: item} */
+
+describe("POST /items", function() {
+    test("Creates new item to shopping list", async function () {
+        const resp = await request(app)
+            .post(`/items`)
+            .send({
+                name: "Nike"
+            });
+        expect(resp.statusCode).toBe(201);
+        expect(resp.body).toEqual({
+            item: { name: "Sneakers" }
+        });
+    });
+});
+//end
+
+/** PATCH /items/{name} - update item return {item:item} */
+
+describe("PATCH /items/:name", function() {
+    test("Updates a single item", async function() {
+        const resp = await request(app)
+        .patch(`/items/${nike.name}`)
+        .send({
+            name: "Jordan"
+        });
+        expect(resp.statusCode).toBe(200);
+        expect(resp.body).toEqual({
+            item: { name: "Jordan" }
+        });
+    });
+
+    test("Responds with 404 if id invalid", async function() {
+        const resp = await request(app).patch(`/items/0`);
+        ecpect(resp.statusCode).toBe(404);
+    });
+});
+//end
+
+/** DELETE /items/[name] - delete item; return {message : "item deleted"} */
+
+describe("DELETE /items/:name", function() {
+    test("Deletes a single item", async function() {
+        const resp = await request(app).delete(`/items/${nike.name}`);
+        expect(resp.statusCode).toBe(200);
+        expect(resp.body).toEqual({ message: "Deleted" });
+    });
+    test("Responds with 404 for deleting invalid item", async () => {
+        const res = await request(app).delete(`/items/adidas`);
+        expect(res.statusCode).toBe(404);
+    });
+});
