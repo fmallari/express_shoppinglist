@@ -32,7 +32,7 @@ describe("GET /items", function() {
 describe("GET /items/:name", function() {
     test("Gets a single item", async function() {
         const resp = await request(app).get(`/items/${nike.name}`);
-        expect(resp,statusCode).toBe(200);
+        expect(resp.statusCode).toBe(200);
 
         expect(resp.body).toEqual({item: nike});
     });
@@ -55,7 +55,7 @@ describe("POST /items", function() {
             });
         expect(resp.statusCode).toBe(201);
         expect(resp.body).toEqual({
-            item: { name: "Sneakers" }
+            item: { name: "Nike" }
         });
     });
 });
@@ -78,7 +78,7 @@ describe("PATCH /items/:name", function() {
 
     test("Responds with 404 if id invalid", async function() {
         const resp = await request(app).patch(`/items/0`);
-        ecpect(resp.statusCode).toBe(404);
+        expect(resp.statusCode).toBe(404);
     });
 });
 //end
